@@ -1,6 +1,5 @@
 import { Worker } from 'worker_threads';
-import { join } from 'path';
-
+import { resolve } from 'path';
 export default class Logger {
     constructor(name) {
         this.worker = null;
@@ -9,7 +8,8 @@ export default class Logger {
     }
     init(filenamePrefix) {
         if (this.worker) return;
-        this.worker = new Worker(join(process.cwd(), './src/worker.logger.js'), { type: "module", workerData: { folder: process.env.LOG_PATH || './logs', prefix: filenamePrefix } });
+        const workFile = process.env.LOGGER_WORKER_FILE || './src/worker.logger.js';
+        this.worker = new Worker(resolve(workFile), { type: "module", workerData: { folder: process.env.LOGGER_LOG_PATH || './logs', prefix: filenamePrefix } });
         this.worker.on('message', this.handleWorkerMessage.bind(this));
         this.worker.on('error', this.handleWorkerError.bind(this));
         this.worker.on('exit', this.handleWorkerExit.bind(this));
