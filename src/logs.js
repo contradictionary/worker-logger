@@ -1,5 +1,6 @@
 import { Worker } from 'worker_threads';
 import { resolve } from 'path';
+console.log('loaded logs.js')
 export default class Logger {
     constructor(name) {
         this.worker = null;
@@ -35,23 +36,22 @@ export default class Logger {
             this.closeCB && this.closeCB(this.Name);
         }
     }
-    log(message) {
-        !this.terminated && this.worker.postMessage({ type: 'log', data: new Date().toJSON() + "|" + message });
+    log(message, data) {
+        this.worker.postMessage({ type: 'log', name: this.Name, date: new Date().toJSON(), data: message, additional: data });
         return this;
     }
-    debug(message) {
-        !this.terminated && this.worker.postMessage({ type: 'debug', data: new Date().toJSON() + "|" + message });
+    debug(message, data) {
+        this.worker.postMessage({ type: 'debug', name: this.Name, date: new Date().toJSON(), data: message, additional: data });
         return this;
     }
-    warn(message) {
-        !this.terminated && this.worker.postMessage({ type: 'warn', data: new Date().toJSON() + "|" + message });
+    warn(message, data) {
+        this.worker.postMessage({ type: 'warn', name: this.Name, date: new Date().toJSON(), data: message, additional: data });
         return this;
     }
-    error(message) {
-        !this.terminated && this.worker.postMessage({ type: 'error', data: new Date().toJSON() + "|" + message });
+    error(message, data) {
+        this.worker.postMessage({ type: 'error', name: this.Name, date: new Date().toJSON(), data: message, additional: data });
         return this;
     }
-
     close(cb) {
         this.worker.postMessage({ type: 'close' });
         this.closeCB = cb;
