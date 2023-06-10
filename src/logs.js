@@ -1,6 +1,5 @@
 import { Worker } from 'worker_threads';
 import { resolve } from 'path';
-console.log('loaded logs.js')
 export default class Logger {
     constructor(name) {
         this.worker = null;
