@@ -1,7 +1,7 @@
 import { workerData, parentPort } from 'worker_threads';
 import { existsSync, createWriteStream } from 'fs';
 import { resolve, join, } from 'path';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 const ChalkColours = {
   warn: 'yellow',
   debug: 'green',
